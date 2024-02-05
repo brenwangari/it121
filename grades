@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grades</title>
+</head>
+<body>
+    <h1>Student Grades</h1>
+
+    <script>
+        // Student grades data
+        let grades = "jim|25, sue|32, mary|34, ann|22, ted|28, frank|15, lisa|19, mike|30, ahn|26, vishaya|27";
+        let students = grades.split(", ");
+        let totalStudents = students.length;
+        let lowestScore = Infinity;
+        let highestScore = -Infinity;
+        let totalScore = 0;
+
+        students.forEach(function(student) {
+
+            let [name, scoreStr] = student.split("|");
+
+            let capitalizedFirstName = name.charAt(0).toUpperCase() + name.slice(1);
+
+            let score = parseInt(scoreStr);
+
+            lowestScore = Math.min(lowestScore, score);
+            highestScore = Math.max(highestScore, score);
+
+            totalScore += score;
+
+            document.write(`<p>${capitalizedFirstName} - ${score}</p>`);
+        });
+
+        let averageScore = totalScore / totalStudents;
+
+        document.write(`<p>Total students: ${totalStudents}</p>`);
+        document.write(`<p>Lowest score: ${lowestScore}</p>`);
+        document.write(`<p>Highest score: ${highestScore}</p>`);
+        document.write(`<p>Average score: ${averageScore.toFixed(2)}</p>`);
+    </script>
+</body>
+</html>
