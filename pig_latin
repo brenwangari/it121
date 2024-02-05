@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pig Latin Translator</title>
+</head>
+<body>
+    <script>
+        /*
+            Pig Latin Translator
+            Author: Brenda Wangari
+            Date: January 31, 2024
+        */
+
+        // Function to translate text to Pig Latin
+        function translateToPigLatin() {
+        
+            var userInput = prompt("Enter a sentence:");
+
+            if (!userInput || userInput.trim().split(' ').some(word => word.length === 1)) {
+                alert("Input can't be translated. Please enter a valid sentence.");
+                return; // Exit the function if input is invalid
+            }
+            var words = userInput.split(' ');
+
+            var pigLatinWords = words.map(function (word) {
+
+                var lowerCaseWord = word.toLowerCase();
+
+                if ('aeiou'.includes(lowerCaseWord[0])) {
+                    return word + 'way'; 
+                }
+               
+                else if ('bcdfghjklmnpqrstvwxyz'.includes(lowerCaseWord[0])) {
+                    return word.slice(1) + lowerCaseWord[0] + 'ay'; 
+                }
+               
+                else if ('bcdfghjklmnpqrstvwxyz'.includes(lowerCaseWord[0]) && 'bcdfghjklmnpqrstvwxyz'.includes(lowerCaseWord[1])) {
+                    return word.slice(2) + lowerCaseWord.slice(0, 2) + 'ay';
+                }
+
+                return word;
+            });
+
+            alert("Pig Latin Translation: " + pigLatinWords.join(' '));
+        }
+
+        translateToPigLatin();
+    </script>
+</body>
+</html>
