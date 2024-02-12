@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Dealing Program</title>
+</head>
+<body>
+
+    <h1>Card Dealing Program</h1>
+    <button onclick="dealCards()">Deal Cards</button>
+    <div id="hand"></div>
+
+    <script>
+        function Card(value, suit) {
+            this.value = value;
+            this.suit = suit;
+        }
+        var deck = [];
+        var suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+        var values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
+
+        for (var i = 0; i < suits.length; i++) {
+            for (var j = 0; j < values.length; j++) {
+                deck.push(new Card(values[j], suits[i]));
+            }
+        }
+        function dealCards() {
+            document.getElementById("hand").innerHTML = "";
+
+            var shuffledDeck = deck.slice(); 
+            for (var i = shuffledDeck.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                [shuffledDeck[i], shuffledDeck[j]] = [shuffledDeck[j], shuffledDeck[i]];
+            }
+
+            var hand = shuffledDeck.slice(0, 5); 
+
+            var handDisplay = document.getElementById("hand");
+            hand.forEach(function(card) {
+                var cardInfo = document.createElement("p");
+                var displayValue = card.value
+                if (isNaN(displayValue)) {
+                    displayValue = card.value;
+                }
+                cardInfo.textContent = displayValue + " of " + card.suit;
+                handDisplay.appendChild(cardInfo);
+            });
+        }
+    </script>
+
+</body>
+</html>
