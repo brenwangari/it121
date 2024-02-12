@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+</head>
+<body>
+    <form id="myForm">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="button" onclick="validateForm()">Submit</button>
+    </form>
+
+    <script>
+        // Function to validate the password
+        function validatePassword(password) {
+            return password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password);
+        }
+
+        // Function to validate the form
+        function validateForm() {
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+            var password = document.getElementById('password').value;
+
+            // Validate password
+            if (!validatePassword(password)) {
+                alert("Invalid password. Password must have at least 8 characters, at least one uppercase letter, and at least one lowercase letter.");
+                return;
+            }
+
+            // Validate first name
+            if (!firstName.trim()) {
+                alert("First name is required.");
+                return;
+            }
+
+            // Validate last name
+            if (!lastName.trim()) {
+                alert("Last name is required.");
+                return;
+            }
+
+            alert("Form is valid!");
+        }
+    </script>
+</body>
+</html>
