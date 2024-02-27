@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5-Day Weather Forecast</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        #forecast {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .day {
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>5-Day Weather Forecast</h1>
+    <form id="weatherForm">
+        <label for="cityInput">Enter City:</label>
+        <input type="text" id="cityInput" value="Seattle" required>
+        <button type="submit">Get Forecast</button>
+    </form>
+
+    <div id="forecast"></div>
+
+    <script>
+        const apiKey = '7986d999f1efd8c66767b5a533112fd6';
+
+        const kelvinToF = (value) => {
+            return (((Number(value) - 273.15) * 9) / 5 + 32).toFixed(2);
+        };
+
+        const formatDate = (timestamp) => {
+            const date = new Date(timestamp * 1000);
+            const options = { month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        };
+
+        const fetchWeatherData = async (city) => {
+            try {
+                const response = await fetch(
+                    `http://api.openweathermap.org/data/2.5/forecast?q=${city},us&cnt=5&appid=${apiKey}`
+                );
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch weather data');
+                }
+
+                const data = await response.json();
+                return data.list;
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        };
+
+        const displayForecast = (forecast) => {
+            const forecastContainer = document.getElementById('forecast');
+            forecastContainer.innerHTML = '';
+
+            forecast.forEach((day) => {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+
+                const date = formatDate(day.dt);
+                const minTemp = kelvinToF(day.main.temp_min);
+                const maxTemp = kelvinToF(day.main.temp_max);
+
+                dayElement.innerHTML = `
+                    <p>Date: ${date}</p>
+                    <p>Min Temp: ${minTemp}°F</p>
+                    <p>Max Temp: ${maxTemp}°F</p>
+                    <p>Humidity: ${day.main.humidity}%</p>
+                    <p>Description: ${day.weather[0].description}</p>
+                    <img class="icon" src="http://openweathermap.org/img/w/${day.weather[0].icon}.png" alt="Weather Icon">
+                `;
+
+                forecastContainer.appendChild(dayElement);
+            });
+        };
+
+        const weatherForm = document.getElementById('weatherForm');
+        weatherForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const cityInput = document.getElementById('cityInput');
+            const city = cityInput.value.trim();
+
+            if (city && isNaN(city)) {
+                const forecast = await fetchWeatherData(city);
+                if (forecast) {
+                    displayForecast(forecast);
+                } else {
+                    alert('Failed to fetch weather data. Please try again.');
+                }
+            } else {
+                alert('Please enter a valid city name.');
+            }
+        });
+        weatherForm.submit();
+    </script>
+</body>
+
+</html>
+
